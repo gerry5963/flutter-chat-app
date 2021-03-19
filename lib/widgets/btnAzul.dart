@@ -22,9 +22,9 @@ class BtnAzul extends StatelessWidget {
                  child: Text(this.textoBtn,style:TextStyle(color: Colors.white,fontSize: 17)),
                ),
              ),
-             onPressed:() {
-               this.onPressed();
-             }
+             onPressed:this.onPressed 
+                         
+             
            );
       }
 }

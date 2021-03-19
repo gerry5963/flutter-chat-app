@@ -1,9 +1,12 @@
+import 'package:chat_app/helpers/mostrar_alerta.dart';
+import 'package:chat_app/services/auth_service.dart';
 import 'package:chat_app/widgets/btnAzul.dart';
 import 'package:chat_app/widgets/custom_labels.dart';
 import 'package:chat_app/widgets/custom_logo.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chat_app/widgets/custom_input.dart';
+import 'package:provider/provider.dart';
 
 
 
@@ -49,6 +52,9 @@ final passCtrl = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+
+    final authService  = Provider.of<AuthService>(context);
+
     return Container(        
         margin: EdgeInsets.only(top:30),
         padding: EdgeInsets.symmetric(horizontal:50),
@@ -71,7 +77,27 @@ final passCtrl = TextEditingController();
           ),
           
            //TODO: crear boton
-          BtnAzul(textoBtn: 'Ingrese',onPressed: () { print(emailCtrl.text+ ' ' +passCtrl.text );},),
+          BtnAzul(textoBtn: 'Ingrese',
+          onPressed: 
+          authService.autenticando ? null : () async { 
+            FocusScope.of(context).unfocus();
+            print(emailCtrl.text+ ' ' +passCtrl.text );              
+            final loginOK= await  authService.login(emailCtrl.text.trim(), passCtrl.text.trim());
+            
+            if(loginOK){
+              //Conectar a el socket server 
+              //navegar a otra pantalla
+              Navigator.pushReplacementNamed(context, 'users');
+
+            }else {
+              //Mostrar alerta
+              mostrarAlerta(context, 'Login Incorrecto', 'Revise sus credenciales nuevamente');
+            }
+            
+            },
+            
+              //authService.autenticando
+            ),
          ],
        ),
     );
