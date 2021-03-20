@@ -1,5 +1,6 @@
 import 'package:chat_app/helpers/mostrar_alerta.dart';
 import 'package:chat_app/services/auth_service.dart';
+import 'package:chat_app/services/socket_service.dart';
 import 'package:chat_app/widgets/btnAzul.dart';
 import 'package:chat_app/widgets/custom_labels.dart';
 import 'package:chat_app/widgets/custom_logo.dart';
@@ -54,6 +55,7 @@ final passCtrl = TextEditingController();
   Widget build(BuildContext context) {
 
     final authService  = Provider.of<AuthService>(context);
+    final socketService  = Provider.of<SocketService>(context);
 
     return Container(        
         margin: EdgeInsets.only(top:30),
@@ -86,6 +88,7 @@ final passCtrl = TextEditingController();
             
             if(loginOK){
               //Conectar a el socket server 
+              socketService.connect();
               //navegar a otra pantalla
               Navigator.pushReplacementNamed(context, 'users');
 
